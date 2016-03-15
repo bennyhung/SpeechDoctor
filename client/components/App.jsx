@@ -24,8 +24,6 @@ class App extends React.Component {
   handleLandingBtnClick = () => {
     this.setState({
       onLandingPage: !this.state.onLandingPage,
-    }, () => {
-      console.log(this.state.onLandingPage);
     });
   }
 
@@ -45,7 +43,6 @@ class App extends React.Component {
 
 class LandingPageHandler extends React.Component {
   render() {
-    console.log('app props handlebuttonclick passed ', this.props.handleLandingBtnClick);
     return (
       <LandingPage handleLandingBtnClick={this.props.handleLandingBtnClick} />
     )
