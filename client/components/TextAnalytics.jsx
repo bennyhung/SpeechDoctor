@@ -11,11 +11,10 @@ import { getDefs,
 function renderTopThree(string) {
   const analyticsObj = analyzeText(string);
   const topThreeWordsResult = analyticsObj.topThree;
+  const topThreeWordsKeys = Object.keys(topThreeWordsResult);
   const results = [];
-  for (const key in topThreeWordsResult) {
-    if (topThreeWordsResult.hasOwnProperty(key)) {
-      results.push([key, `: ${topThreeWordsResult[key]} times`]);
-    }
+  for (let i = 0; i < topThreeWordsKeys.length; i++) {
+    results.push([topThreeWordsKeys[i], `: ${topThreeWordsResult[topThreeWordsKeys[i]]} times`]);
   }
   return results;
 }
