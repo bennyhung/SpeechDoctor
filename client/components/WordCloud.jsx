@@ -15,6 +15,7 @@ export default function cloudMaker(prop) {
       wordArrayWithFrequency.sort((a, b) => b[1] - a[1]);
     }
   }
+  console.log('word array w/ frequency, ', wordArrayWithFrequency);
 
   for (let i = 0; i < wordArrayWithFrequency.length; i++) {
     wordArrayNoFrequency.push(wordArrayWithFrequency[i][0]);
@@ -29,15 +30,15 @@ export default function cloudMaker(prop) {
   function draw(words) {
     d3.select('#text-input').append('svg')
       .attr('id', 'word-cloud')
-      .attr('width', 300)
+      .attr('width', 600)
       .attr('height', 300)
     .append('g')
       .attr('transform', `translate(${layout.size()[0] / 2}, ${layout.size()[1] / 2})`)
     .selectAll('text')
       .data(words)
     .enter().append('text')
-      .style('font-size', (d) => `${d.size} px`)
-      .style('font-family', 'Impact')
+      .style('font-size', (d) => `${d.size}px`)
+      .style('font-family', (d) => d.font)
       .style('fill', (d, i) => fill(i))
       .attr('text-anchor', 'middle')
       .attr('transform', (d) => `translate(${[d.x, d.y]})rotate(${d.rotate})`)
@@ -45,12 +46,12 @@ export default function cloudMaker(prop) {
   }
 
   layout = cloud()
-    .size([300, 300])
-    .words(wordArrayNoFrequency.splice(0, numberOfWordsInCloud).map((d) => (
-        { text: d, size: 10 + Math.random() * 15 }
+    .size([600, 300])
+    .words(wordArrayWithFrequency.splice(0, numberOfWordsInCloud).map((d) => (
+        { text: d[0], size: d[1] * 8 }
       )))
     .rotate(() => ~~(Math.random() * 2) * 90)
-    .font('Impact')
+    .font('Arial')
     .fontSize((d) => d.size)
     .on('end', draw);
 
