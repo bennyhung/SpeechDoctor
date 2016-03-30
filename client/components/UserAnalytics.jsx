@@ -20,6 +20,7 @@ export default function UserAnalytics(prop) {
   const overallAnalysis = analyzeText(combinedTextInputs);
   // use overallAnalysis.allTotals for WordCloud
   const overallTextStats = getTextStats(combinedTextInputs);
+  const overallARI = getAutomatedReadabilityIndex(combinedTextInputs).score;
 
   // find top three most used words
   const topThreeArray = [];
@@ -39,10 +40,11 @@ export default function UserAnalytics(prop) {
     individualTextAverages.push({
       wordLength: stats.charactersPerWord,
       sentenceLength: stats.wordsPerSentence,
-      ARI: getAutomatedReadabilityIndex(textInput),
+      ARI: getAutomatedReadabilityIndex(textInput).score,
     });
     return individualTextAverages;
   });
+  console.log('ITA__________', individualTextAverages);
 
   // Pie Chart
   const PieChart = ReactD3.PieChart;
@@ -59,7 +61,7 @@ export default function UserAnalytics(prop) {
     values: [
       { x: 'Word Length', y: overallTextStats.charactersPerWord },
       { x: 'Sentence Length', y: overallTextStats.wordsPerSentence },
-      // { x: 'ARI', y: getAutomatedReadabilityIndex(combinedTextInputs) },
+      { x: 'ARI', y: overallARI },
     ],
   }];
   // console.log('ARI', getAutomatedReadabilityIndex(combinedTextInputs));
@@ -67,13 +69,16 @@ export default function UserAnalytics(prop) {
   // Line Graphs
   const lineWordLength = [];
   const lineSentenceLength = [];
-  // const lineARI = [];
+  const lineARI = [];
   for (let i = 0; i < individualTextAverages.length; i++) {
     lineWordLength.push({
       x: i, y: individualTextAverages[i].wordLength,
     });
     lineSentenceLength.push({
       x: i, y: individualTextAverages[i].sentenceLength,
+    });
+    lineARI.push({
+      x: i, y: individualTextAverages[i].ARI,
     });
   }
   const LineChart = ReactD3.LineChart;
@@ -86,19 +91,10 @@ export default function UserAnalytics(prop) {
       label: 'wordsPerSentence',
       values: lineSentenceLength,
     },
-    // {
-    //   label: 'ARI',
-    //   values: [
-    //     { x: 0, y: 4 },
-    //     { x: 1.3, y: 5 },
-    //     { x: 3, y: 2 },
-    //     { x: 3.5, y: 9 },
-    //     { x: 4, y: 7 },
-    //     { x: 4.5, y: 4 },
-    //     { x: 5, y: 14 },
-    //     { x: 5.5, y: 7 },
-    //   ],
-    // },
+    {
+      label: 'ARI',
+      values: lineARI,
+    },
   ];
 
   return (
