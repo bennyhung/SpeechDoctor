@@ -9,14 +9,15 @@ import { getTextStats,
        } from '../../server/utils/customTextAnalytics';
 
 export default function UserAnalytics(prop) {
-  const textData = prop.data;
+  const data = prop.data;
   // aggregate text
   const combinedTextInputs =
-    textData.reduce((acc, curr) => {
+    data.reduce((acc, curr) => {
       acc += `${curr} `;
       return acc;
     }, '');
 
+  console.log(combinedTextInputs);
   const overallAnalysis = analyzeText(combinedTextInputs);
   const overallTextStats = getTextStats(combinedTextInputs);
   const overallARI = getAutomatedReadabilityIndex(combinedTextInputs).score;
@@ -32,7 +33,7 @@ export default function UserAnalytics(prop) {
 
   // individual
   const individualTextAverages = [];
-  textData.map((textInput) => {
+  data.map((textInput) => {
     const stats = getTextStats(textInput);
     individualTextAverages.push({
       wordLength: stats.charactersPerWord,
@@ -132,6 +133,5 @@ export default function UserAnalytics(prop) {
 }
 
 UserAnalytics.propTypes = {
-  textData: React.PropTypes.array,
-  // speechData: React.PropTypes.array,
+  data: React.PropTypes.array,
 };
