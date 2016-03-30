@@ -60,7 +60,6 @@ export default function UserAnalytics(prop) {
       { x: 'ARI', y: overallARI },
     ],
   }];
-  // console.log('ARI', getAutomatedReadabilityIndex(combinedTextInputs));
 
   // Line Graphs
   const lineWordLength = [];
@@ -127,9 +126,7 @@ export default function UserAnalytics(prop) {
           margin={ { top: 10, bottom: 50, left: 50, right: 10 } }
         />
       </div>
-      <div>
-        <WordCloud text={combinedTextInputs} />
-      </div>
+      <WordCloud text={combinedTextInputs} />
     </div>
   );
 }
