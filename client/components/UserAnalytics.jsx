@@ -1,15 +1,15 @@
 /* eslint no-param-reassign: 0*/
 
 import React from 'react';
-// import WordCloud from './WordCloud.jsx'
 import ReactD3 from 'react-d3-components';
+import WordCloud from './WordCloud.jsx';
 import { getTextStats,
          analyzeText,
          getAutomatedReadabilityIndex,
        } from '../../server/utils/customTextAnalytics';
 
 export default function UserAnalytics(prop) {
-  const textData = prop.textData;
+  const textData = prop.data;
   // aggregate text
   const combinedTextInputs =
     textData.reduce((acc, curr) => {
@@ -18,7 +18,6 @@ export default function UserAnalytics(prop) {
     }, '');
 
   const overallAnalysis = analyzeText(combinedTextInputs);
-  // use overallAnalysis.allTotals for WordCloud
   const overallTextStats = getTextStats(combinedTextInputs);
   const overallARI = getAutomatedReadabilityIndex(combinedTextInputs).score;
 
@@ -27,9 +26,7 @@ export default function UserAnalytics(prop) {
   const topThree = overallAnalysis.topThree;
   for (const key in topThree) {
     if (topThree.hasOwnProperty(key)) {
-      topThreeArray.push({
-        x: key, y: topThree[key],
-      });
+      topThreeArray.push({ x: key, y: topThree[key] });
     }
   }
 
@@ -44,7 +41,6 @@ export default function UserAnalytics(prop) {
     });
     return individualTextAverages;
   });
-  console.log('ITA__________', individualTextAverages);
 
   // Pie Chart
   const PieChart = ReactD3.PieChart;
@@ -131,11 +127,14 @@ export default function UserAnalytics(prop) {
           margin={ { top: 10, bottom: 50, left: 50, right: 10 } }
         />
       </div>
+      <div>
+        <WordCloud text={combinedTextInputs} />
+      </div>
     </div>
   );
 }
 
 UserAnalytics.propTypes = {
-  // speechData: React.PropTypes.string,
   textData: React.PropTypes.array,
+  // speechData: React.PropTypes.array,
 };
